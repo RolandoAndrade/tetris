@@ -1,5 +1,7 @@
 const BLOCK_SIZE = 20;
-
+const COLORS = ["#fff47e", "#ff6d4a",
+                "#ff3d49","#46dbff",
+                "#77ff52","#ff519c"];
 class Piece
 {
     constructor(x,y)
@@ -10,7 +12,7 @@ class Piece
         this.rotationMod = 1;
         this.x = x;
         this.y = y;
-        this.color ="#fff";
+        this.color = COLORS[Math.floor(Math.random()*COLORS.length)];
     }
 
     draw()
