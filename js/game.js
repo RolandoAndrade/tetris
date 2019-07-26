@@ -18,11 +18,19 @@ class Game
             {
                 case 38:
                     a.piece.rotateLeft();
-                    a.loop();
+                    a.draw();
+                    break;
+                case 37:
+                    a.piece.moveLeft();
+                    a.draw();
+                    break;
+                case 39:
+                    a.piece.moveRight();
+                    a.draw();
                     break;
                 case 40:
                     a.piece.rotateRight();
-                    a.loop();
+                    a.draw();
                     break;
             }
         });
@@ -34,13 +42,21 @@ class Game
         this.gameOver = false;
         this.background = new Rectangle(0,0,WIDTH,HEIGHT, "#424242");
         this.piece = new PieceL(40,200);
+        this.piece.setRotation(Math.floor(Math.random()*5));
         this.put = [];
+        this.loop();
+    }
+
+    draw()
+    {
+        this.background.draw();
+        this.piece.draw();
     }
 
     loop()
     {
-        this.background.draw();
-        this.piece.draw();
+        this.piece.moveY();
+        this.draw();
     }
 }
 

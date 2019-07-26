@@ -4,7 +4,7 @@ const COLORS = ["#fff47e", "#ff6d4a",
                 "#77ff52","#ff519c"];
 class Piece
 {
-    constructor(x,y)
+    constructor(x, y)
     {
         this.blocks = [];
         this.shapes = [];
@@ -12,24 +12,25 @@ class Piece
         this.rotationMod = 1;
         this.x = x;
         this.y = y;
-        this.color = COLORS[Math.floor(Math.random()*COLORS.length)];
+        this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
     }
 
     draw()
     {
-        this.blocks.forEach((e)=>e.draw());
+        this.blocks.forEach((e) => e.draw());
     }
 
     generateFromMatrix(matrix)
     {
         this.blocks = [];
-        matrix.forEach((e,i)=>
+        matrix.forEach((e, i) =>
         {
-            e.forEach((e,j)=>
+            e.forEach((e, j) =>
             {
-                if(e===1)
+                if (e === 1)
                 {
-                    this.blocks.push(new Rectangle(this.x+j*BLOCK_SIZE,this.y+i*BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, this.color));
+                    this.blocks.push(new Rectangle(this.x + j * BLOCK_SIZE, this.y + i * BLOCK_SIZE,
+                        BLOCK_SIZE, BLOCK_SIZE, this.color));
                 }
             })
         })
@@ -43,15 +44,38 @@ class Piece
 
     rotateLeft()
     {
-        if(this.rotation === 0)
+        if (this.rotation === 0)
         {
             this.rotation = this.shapes.length - 1;
-        }
-        else
+        } else
         {
             this.rotation--;
         }
         this.generateFromMatrix(this.shapes[this.rotation]);
+    }
+
+    setRotation(rotation)
+    {
+        this.rotation = rotation % this.rotationMod;
+        this.generateFromMatrix(this.shapes[this.rotation]);
+    }
+
+    moveY()
+    {
+        this.blocks.forEach((e) => (e.y += BLOCK_SIZE));
+        this.y += BLOCK_SIZE;
+    }
+
+    moveLeft()
+    {
+        this.blocks.forEach((e) => (e.x -= BLOCK_SIZE));
+        this.x -= BLOCK_SIZE;
+    }
+
+    moveRight()
+    {
+        this.blocks.forEach((e) => (e.x += BLOCK_SIZE));
+        this.x += BLOCK_SIZE;
     }
 }
 
