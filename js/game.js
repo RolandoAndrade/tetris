@@ -6,7 +6,7 @@ const WIDTH = 300;
 
 let rect = new Rectangle(0,0,WIDTH,HEIGHT, "#424242");
 
-let piece = new PieceZ2(50,200);
+let piece = new PieceI(50,200);
 
 function loop()
 {
