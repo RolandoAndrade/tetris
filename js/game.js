@@ -50,18 +50,25 @@ class Game
     draw()
     {
         this.background.draw();
+        this.drop.forEach((e) => e.draw());
         this.piece.draw();
     }
 
     collision()
     {
-
+        if(this.piece.collision(this.drop))
+        {
+            this.drop.push(this.piece);
+            console.log(this.drop);
+            this.piece = new PieceI(40,200);
+        }
     }
 
     loop()
     {
-        //this.piece.moveY();
+        this.piece.moveY();
         this.draw();
+        this.collision();
     }
 }
 
@@ -71,4 +78,4 @@ function loop()
 {
     game.loop();
 }
-window.setInterval(loop,1000);
+window.setInterval(loop,500);

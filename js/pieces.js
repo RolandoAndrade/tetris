@@ -47,7 +47,7 @@ class Piece
         });
     }
 
-    collision(fun)
+    collisionWhenRotate(fun)
     {
         if(this.xL<0||this.xR>WIDTH)
         {
@@ -59,7 +59,7 @@ class Piece
     {
         this.rotation = (this.rotation + 1) % this.rotationMod;
         this.generateFromMatrix(this.shapes[this.rotation]);
-        this.collision(()=>this.rotateRight());
+        this.collisionWhenRotate(()=>this.rotateRight());
     }
 
     rotateLeft()
@@ -72,7 +72,7 @@ class Piece
             this.rotation--;
         }
         this.generateFromMatrix(this.shapes[this.rotation]);
-        this.collision(()=>this.rotateLeft());
+        this.collisionWhenRotate(()=>this.rotateLeft());
     }
 
     setRotation(rotation)
@@ -85,6 +85,7 @@ class Piece
     {
         this.blocks.forEach((e) => (e.y += BLOCK_SIZE));
         this.y += BLOCK_SIZE;
+        this.yB += BLOCK_SIZE;
     }
 
     moveX(delta)
@@ -109,6 +110,15 @@ class Piece
         {
             this.moveX(BLOCK_SIZE);
         }
+    }
+
+    collision(blocks)
+    {
+        if(this.yB >= HEIGHT)
+        {
+            return true;
+        }
+
     }
 }
 
