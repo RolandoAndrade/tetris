@@ -29,6 +29,8 @@ class Piece
         this.blocks = [];
         this.xL= 1000;
         this.yT= 1000;
+        this.xR = 0;
+        this.yB = 0;
         matrix.forEach((e, i) =>
         {
             e.forEach((e, j) =>
@@ -222,5 +224,25 @@ class PieceL extends Piece
         ];
         this.rotationMod = 4;
         this.generateFromMatrix(this.shapes[0]);
+    }
+}
+
+class FabricOfPieces
+{
+    generateRandom()
+    {
+        let a = Math.floor(Math.random()*5);
+        switch (a)
+        {
+            case 0:
+                return  new PieceZ1(200,0);
+            case 1:
+                return new PieceZ2(200,0);
+            case 2:
+                return new PieceL(200,0);
+            case 3:
+                return new PieceI(200,0);
+        }
+        return new PieceH(200,0);
     }
 }

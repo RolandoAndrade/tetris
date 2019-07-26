@@ -4,6 +4,9 @@ let ctx = canvas.getContext("2d");
 const HEIGHT = 500;
 const WIDTH = 300;
 
+const PIECES = [
+
+];
 
 
 class Game
@@ -41,10 +44,16 @@ class Game
     {
         this.gameOver = false;
         this.background = new Rectangle(0,0,WIDTH,HEIGHT, "#424242");
-        this.piece = new PieceL(40,200);
-        this.piece.setRotation(Math.floor(Math.random()*5));
+        this.fabric = new FabricOfPieces();
+        this.generateRandom();
         this.drop = [];
         this.loop();
+    }
+
+    generateRandom()
+    {
+        this.piece = this.fabric.generateRandom();
+        this.piece.setRotation(Math.floor(Math.random()*5));
     }
 
     draw()
@@ -59,16 +68,16 @@ class Game
         if(this.piece.collision(this.drop))
         {
             this.drop.push(this.piece);
-            console.log(this.drop);
-            this.piece = new PieceI(40,200);
+            this.generateRandom();
         }
     }
 
     loop()
     {
         this.piece.moveY();
-        this.draw();
         this.collision();
+        this.draw();
+
     }
 }
 
@@ -78,4 +87,4 @@ function loop()
 {
     game.loop();
 }
-window.setInterval(loop,500);
+window.setInterval(loop,100);
