@@ -43,7 +43,7 @@ class Game
         this.background = new Rectangle(0,0,WIDTH,HEIGHT, "#424242");
         this.piece = new PieceL(40,200);
         this.piece.setRotation(Math.floor(Math.random()*5));
-        this.put = [];
+        this.drop = [];
         this.loop();
     }
 
@@ -53,9 +53,14 @@ class Game
         this.piece.draw();
     }
 
+    collision()
+    {
+
+    }
+
     loop()
     {
-        this.piece.moveY();
+        //this.piece.moveY();
         this.draw();
     }
 }

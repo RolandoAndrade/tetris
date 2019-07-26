@@ -13,6 +13,10 @@ class Piece
         this.x = x;
         this.y = y;
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        this.xR = 0;
+        this.yB = 0;
+        this.xL = 0;
+        this.yT = 0;
     }
 
     draw()
@@ -23,23 +27,39 @@ class Piece
     generateFromMatrix(matrix)
     {
         this.blocks = [];
+        this.xL= 1000;
+        this.yT= 1000;
         matrix.forEach((e, i) =>
         {
             e.forEach((e, j) =>
             {
                 if (e === 1)
                 {
-                    this.blocks.push(new Rectangle(this.x + j * BLOCK_SIZE, this.y + i * BLOCK_SIZE,
-                        BLOCK_SIZE, BLOCK_SIZE, this.color));
+                    let newX = this.x + j * BLOCK_SIZE;
+                    let newY = this.y + i * BLOCK_SIZE;
+                    this.blocks.push(new Rectangle(newX, newY, BLOCK_SIZE, BLOCK_SIZE, this.color));
+                    this.xL = Math.min(this.xL, newX);
+                    this.yT = Math.min(this.yT, newY);
+                    this.xR = Math.max(this.xR, newX + BLOCK_SIZE);
+                    this.yB = Math.max(this.yB, newY + BLOCK_SIZE);
                 }
             })
-        })
+        });
+    }
+
+    collision(fun)
+    {
+        if(this.xL<0||this.xR>WIDTH)
+        {
+            fun();
+        }
     }
 
     rotateRight()
     {
         this.rotation = (this.rotation + 1) % this.rotationMod;
         this.generateFromMatrix(this.shapes[this.rotation]);
+        this.collision(()=>this.rotateRight());
     }
 
     rotateLeft()
@@ -52,6 +72,7 @@ class Piece
             this.rotation--;
         }
         this.generateFromMatrix(this.shapes[this.rotation]);
+        this.collision(()=>this.rotateLeft());
     }
 
     setRotation(rotation)
@@ -66,16 +87,28 @@ class Piece
         this.y += BLOCK_SIZE;
     }
 
+    moveX(delta)
+    {
+        this.blocks.forEach((e) => (e.x += delta));
+        this.x += delta;
+        this.xR += delta;
+        this.xL += delta;
+    }
+
     moveLeft()
     {
-        this.blocks.forEach((e) => (e.x -= BLOCK_SIZE));
-        this.x -= BLOCK_SIZE;
+        if(this.xL>0)
+        {
+            this.moveX(-BLOCK_SIZE);
+        }
     }
 
     moveRight()
     {
-        this.blocks.forEach((e) => (e.x += BLOCK_SIZE));
-        this.x += BLOCK_SIZE;
+        if(this.xR<WIDTH)
+        {
+            this.moveX(BLOCK_SIZE);
+        }
     }
 }
 
