@@ -72,3 +72,23 @@ class PieceZ1 extends Piece
         this.generateFromMatrix(this.shapes[0]);
     }
 }
+
+class PieceZ2 extends Piece
+{
+    constructor(x, y)
+    {
+        super(x, y);
+        this.shapes = [
+
+            [[0,1,1],
+             [1,1,0]],
+
+            [[1,0],
+             [1,1],
+             [0,1]]
+
+        ];
+        this.rotationMod = 2;
+        this.generateFromMatrix(this.shapes[0]);
+    }
+}
