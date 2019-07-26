@@ -128,3 +128,30 @@ class PieceH extends Piece
         this.generateFromMatrix(this.shapes[0]);
     }
 }
+
+class PieceL extends Piece
+{
+    constructor(x, y)
+    {
+        super(x, y);
+        this.shapes = [
+
+            [[1,0,0],
+             [1,1,1]],
+
+            [[0,1,1,0],
+             [0,1,0,0],
+             [0,1,0,0]],
+
+            [[1,1,1],
+             [0,0,1]],
+
+            [[0,0,1,0],
+             [0,0,1,0],
+             [0,1,1,0]]
+
+        ];
+        this.rotationMod = 4;
+        this.generateFromMatrix(this.shapes[0]);
+    }
+}
