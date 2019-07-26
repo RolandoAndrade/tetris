@@ -114,11 +114,35 @@ class Piece
         }
     }
 
+    collideWith(piece)
+    {
+        for (let i = 0; i < this.blocks.length; i++)
+        {
+            for(let j = 0; j < piece.blocks.length; j++)
+            {
+                if(this.blocks[i].x === piece.blocks[j].x && piece.blocks[j].y === this.blocks[i].y + BLOCK_SIZE)
+                {
+                    console.log("entro");
+                    return true;
+                }
+            }
+        }
+    }
+
     collision(blocks)
     {
         if(this.yB >= HEIGHT)
         {
             return true;
+        }
+        for(let i = 0; i < blocks.length; i++)
+        {
+            if(this.collideWith(blocks[i]))
+            {
+                console.log("enttt")
+                return true;
+            }
+
         }
 
     }
