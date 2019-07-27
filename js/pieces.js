@@ -49,9 +49,9 @@ class Piece
         });
     }
 
-    collisionWhenRotate(fun)
+    collisionWhenRotate(blocks, fun)
     {
-        if (this.xL < 0 || this.xR > WIDTH)
+        if (this.xL < 0 || this.xR > WIDTH || this.collideWith(blocks, (i,j,k)=>this.collideSideWith(i,j,k)))
         {
             fun();
         }
@@ -80,7 +80,7 @@ class Piece
     {
         this.rotation = (this.rotation + 1) % this.rotationMod;
         this.generateFromMatrix(this.shapes[this.rotation]);
-        this.collisionWhenRotate(() => this.rotateRight());
+        this.collisionWhenRotate(pieces, () => this.rotateRight(pieces));
     }
 
     rotateLeft(pieces)
@@ -93,7 +93,7 @@ class Piece
             this.rotation--;
         }
         this.generateFromMatrix(this.shapes[this.rotation]);
-        this.collisionWhenRotate(() => this.rotateLeft());
+        this.collisionWhenRotate(pieces, () => this.rotateLeft(pieces));
     }
 
     setRotation(rotation)
@@ -124,32 +124,26 @@ class Piece
 
     moveLeft(pieces)
     {
-        console.log("Muevo");
         if (this.xL > 0)
         {
             this.moveX(-BLOCK_SIZE);
             if(this.collideWith(pieces, (i,j,piece)=>this.collideSideWith(i,j,piece)))
             {
-                console.log("Devuelvo");
                 this.moveX(BLOCK_SIZE);
             }
         }
-        console.log("Salgo");
     }
 
     moveRight(pieces)
     {
-        console.log("Muevo");
         if (this.xR < WIDTH)
         {
             this.moveX(BLOCK_SIZE);
             if(this.collideWith(pieces, (i,j,piece)=>this.collideSideWith(i,j,piece)))
             {
-                console.log("Devuelvo");
                 this.moveX(-BLOCK_SIZE);
             }
         }
-        console.log("Salgo");
     }
 
     collideUpWith(i, j, piece)
