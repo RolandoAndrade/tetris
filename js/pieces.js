@@ -102,11 +102,16 @@ class Piece
         this.generateFromMatrix(this.shapes[this.rotation]);
     }
 
-    moveY()
+    moveY(pieces)
     {
-        this.blocks.forEach((e) => (e.y += BLOCK_SIZE));
-        this.y += BLOCK_SIZE;
-        this.yB += BLOCK_SIZE;
+        if(!this.collision(pieces))
+        {
+            this.blocks.forEach((e) => (e.y += BLOCK_SIZE));
+            this.y += BLOCK_SIZE;
+            this.yB += BLOCK_SIZE;
+            return false;
+        }
+        return true;
     }
 
     moveX(delta)
@@ -119,26 +124,32 @@ class Piece
 
     moveLeft(pieces)
     {
+        console.log("Muevo");
         if (this.xL > 0)
         {
             this.moveX(-BLOCK_SIZE);
             if(this.collideWith(pieces, (i,j,piece)=>this.collideSideWith(i,j,piece)))
             {
+                console.log("Devuelvo");
                 this.moveX(BLOCK_SIZE);
             }
         }
+        console.log("Salgo");
     }
 
     moveRight(pieces)
     {
+        console.log("Muevo");
         if (this.xR < WIDTH)
         {
             this.moveX(BLOCK_SIZE);
             if(this.collideWith(pieces, (i,j,piece)=>this.collideSideWith(i,j,piece)))
             {
+                console.log("Devuelvo");
                 this.moveX(-BLOCK_SIZE);
             }
         }
+        console.log("Salgo");
     }
 
     collideUpWith(i, j, piece)

@@ -67,14 +67,14 @@ class Game
     {
         if(this.piece.collision(this.drop))
         {
-            this.drop.push(this.piece);
+            this.drop.unshift(this.piece);
             this.generateRandom();
         }
     }
 
     loop()
     {
-        this.piece.moveY();
+        this.piece.moveY(this.drop);
         this.collision();
         this.draw();
 
