@@ -20,19 +20,19 @@ class Game
             switch (e.keyCode)
             {
                 case 38:
-                    a.piece.rotateLeft();
+                    a.piece.rotateLeft(a.drop);
                     a.draw();
                     break;
                 case 37:
-                    a.piece.moveLeft();
+                    a.piece.moveLeft(a.drop);
                     a.draw();
                     break;
                 case 39:
-                    a.piece.moveRight();
+                    a.piece.moveRight(a.drop);
                     a.draw();
                     break;
                 case 40:
-                    a.piece.rotateRight();
+                    a.piece.rotateRight(a.drop);
                     a.draw();
                     break;
             }

@@ -27,8 +27,8 @@ class Piece
     generateFromMatrix(matrix)
     {
         this.blocks = [];
-        this.xL= 1000;
-        this.yT= 1000;
+        this.xL = 1000;
+        this.yT = 1000;
         this.xR = 0;
         this.yB = 0;
         matrix.forEach((e, i) =>
@@ -51,20 +51,39 @@ class Piece
 
     collisionWhenRotate(fun)
     {
-        if(this.xL<0||this.xR>WIDTH)
+        if (this.xL < 0 || this.xR > WIDTH)
         {
             fun();
         }
     }
 
-    rotateRight()
+    collideWith(blocks, fun)
+    {
+        for (let k = 0; k < blocks.length; k++)
+        {
+            let piece = blocks[k];
+            for (let i = 0; i < this.blocks.length; i++)
+            {
+                for (let j = 0; j < piece.blocks.length; j++)
+                {
+                    if (fun(i, j, piece))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    rotateRight(pieces)
     {
         this.rotation = (this.rotation + 1) % this.rotationMod;
         this.generateFromMatrix(this.shapes[this.rotation]);
-        this.collisionWhenRotate(()=>this.rotateRight());
+        this.collisionWhenRotate(() => this.rotateRight());
     }
 
-    rotateLeft()
+    rotateLeft(pieces)
     {
         if (this.rotation === 0)
         {
@@ -74,7 +93,7 @@ class Piece
             this.rotation--;
         }
         this.generateFromMatrix(this.shapes[this.rotation]);
-        this.collisionWhenRotate(()=>this.rotateLeft());
+        this.collisionWhenRotate(() => this.rotateLeft());
     }
 
     setRotation(rotation)
@@ -98,53 +117,48 @@ class Piece
         this.xL += delta;
     }
 
-    moveLeft()
+    moveLeft(pieces)
     {
-        if(this.xL>0)
+        if (this.xL > 0)
         {
             this.moveX(-BLOCK_SIZE);
-        }
-    }
-
-    moveRight()
-    {
-        if(this.xR<WIDTH)
-        {
-            this.moveX(BLOCK_SIZE);
-        }
-    }
-
-    collideWith(piece)
-    {
-        for (let i = 0; i < this.blocks.length; i++)
-        {
-            for(let j = 0; j < piece.blocks.length; j++)
+            if(this.collideWith(pieces, (i,j,piece)=>this.collideSideWith(i,j,piece)))
             {
-                if(this.blocks[i].x === piece.blocks[j].x && piece.blocks[j].y === this.blocks[i].y + BLOCK_SIZE)
-                {
-                    console.log("entro");
-                    return true;
-                }
+                this.moveX(BLOCK_SIZE);
             }
         }
+    }
+
+    moveRight(pieces)
+    {
+        if (this.xR < WIDTH)
+        {
+            this.moveX(BLOCK_SIZE);
+            if(this.collideWith(pieces, (i,j,piece)=>this.collideSideWith(i,j,piece)))
+            {
+                this.moveX(-BLOCK_SIZE);
+            }
+        }
+    }
+
+    collideUpWith(i, j, piece)
+    {
+        return this.blocks[i].x === piece.blocks[j].x && piece.blocks[j].y === this.blocks[i].y + BLOCK_SIZE;
+    }
+
+    collideSideWith(i, j, piece)
+    {
+        return this.blocks[i].x === piece.blocks[j].x && piece.blocks[j].y === this.blocks[i].y;
     }
 
     collision(blocks)
     {
-        if(this.yB >= HEIGHT)
+        if (this.yB >= HEIGHT)
         {
             return true;
         }
-        for(let i = 0; i < blocks.length; i++)
-        {
-            if(this.collideWith(blocks[i]))
-            {
-                console.log("enttt")
-                return true;
-            }
 
-        }
-
+        return this.collideWith(blocks, (i, j, piece) => this.collideUpWith(i, j, piece));
     }
 }
 
