@@ -304,18 +304,19 @@ class FabricOfPieces
 {
     generateRandom()
     {
+        const iX = 120;
         let a = Math.floor(Math.random()*5);
         switch (a)
         {
             case 0:
-                return  new PieceZ1(200,0);
+                return  new PieceZ1(iX,0);
             case 1:
-                return new PieceZ2(200,0);
+                return new PieceZ2(iX,0);
             case 2:
-                return new PieceL(200,0);
+                return new PieceL(iX,0);
             case 3:
-                return new PieceI(200,0);
+                return new PieceI(iX,0);
         }
-        return new PieceH(200,0);
+        return new PieceH(iX,0);
     }
 }

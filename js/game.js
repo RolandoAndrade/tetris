@@ -35,10 +35,15 @@ class Game
 {
     constructor()
     {
-        this.init();
+        this.gameOver = true;
+
+        this.background = new Rectangle(0,0,WIDTH,HEIGHT, "#424242");
+        this.fabric = new FabricOfPieces();
+
         let a = this;
         document.addEventListener("keydown",function (e)
         {
+            console.log(e.keyCode);
             switch (e.keyCode)
             {
                 case 38:
@@ -57,6 +62,8 @@ class Game
                     a.piece.rotateRight(a.drop);
                     a.draw();
                     break;
+                case 13:
+                    a.init();
                 default:
                     a.loop();
             }
@@ -68,8 +75,6 @@ class Game
     {
         this.gameOver = false;
         this.score = new Score();
-        this.background = new Rectangle(0,0,WIDTH,HEIGHT, "#424242");
-        this.fabric = new FabricOfPieces();
         this.generateRandom();
         this.drop = [];
         this.loop();
@@ -164,7 +169,6 @@ class Game
         let length = (p.yB-p.yT)/BLOCK_SIZE;
         let arr = new Array(length).fill(0);
         this.runDrop((y)=>{arr[y]++; return false});
-        console.log(arr);
         for(let i = length -1 ; i >= 0; i--)
         {
             if(arr[i] === WIDTH/BLOCK_SIZE)
@@ -180,15 +184,47 @@ class Game
         {
             this.drop.unshift(this.piece);
             this.rowFilled();
+            this.checkGameOver();
             this.generateRandom();
+        }
+    }
+
+    checkGameOver()
+    {
+        if(this.piece.y===0)
+        {
+            this.gameOver = true;
         }
     }
 
     loop()
     {
-        this.collision();
-        this.piece.moveY(this.drop);
-        this.draw();
+        if(!this.gameOver)
+        {
+            this.collision();
+            this.piece.moveY(this.drop);
+            this.draw();
+        }
+        else
+        {
+            this.background.draw();
+            try
+            {
+                this.draw();
+            }
+            catch (e)
+            {
+
+            }
+
+            ctx.textAlign = "center";
+            ctx.font ='30px Arial, sans-serif';
+            ctx.fillStyle="#f7ffb8";
+            ctx.fillText("GAME OVER", WIDTH/2,250);
+            ctx.font ='15px Arial, sans-serif';
+            ctx.fillText("Presiona ENTER para continuar", WIDTH/2,270);
+        }
+
 
     }
 }
