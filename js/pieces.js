@@ -2,6 +2,7 @@ const BLOCK_SIZE = 20;
 const COLORS = ["#fff47e", "#ff6d4a",
                 "#ff3d49","#46dbff",
                 "#77ff52","#ff519c"];
+
 class Piece
 {
     constructor(x, y)
@@ -109,6 +110,7 @@ class Piece
             this.blocks.forEach((e) => (e.y += BLOCK_SIZE));
             this.y += BLOCK_SIZE;
             this.yB += BLOCK_SIZE;
+            this.yT += BLOCK_SIZE;
             return false;
         }
         return true;
@@ -164,6 +166,16 @@ class Piece
         }
 
         return this.collideWith(blocks, (i, j, piece) => this.collideUpWith(i, j, piece));
+    }
+
+    break(y)
+    {
+        this.blocks = this.blocks.filter((a)=>a.y!==y);
+    }
+
+    moveBroke()
+    {
+
     }
 }
 

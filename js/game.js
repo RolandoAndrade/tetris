@@ -8,7 +8,6 @@ const PIECES = [
 
 ];
 
-
 class Game
 {
     constructor()
@@ -63,11 +62,61 @@ class Game
         this.piece.draw();
     }
 
+    deleteRow(rowY, yT)
+    {
+        this.runDrop((y, e)=>
+        {
+            if(y === rowY)
+            {
+                e.break(yT+y*BLOCK_SIZE);
+            }
+        })
+    }
+
+    runDrop(fun)
+    {
+        let p = this.piece;
+        let yT = p.yT;
+        let yB = p.yB;
+        let length = (yB-yT)/BLOCK_SIZE;
+        this.drop.forEach((e) =>
+        {
+            if (e.yT < yB && e.yB > yT)
+            {
+                e.blocks.forEach((a) =>
+                {
+                    let y = (a.y - yT) / BLOCK_SIZE;
+                    if (y > -1 && y < length)
+                    {
+                        fun(y, e);
+                    }
+                })
+            }
+        });
+    }
+
+    rowFilled()
+    {
+        let p = this.piece;
+        let length = (p.yB-p.yT)/BLOCK_SIZE;
+        let arr = new Array(length).fill(0);
+        this.runDrop((y)=>arr[y]++);
+        for(let i = length-1; i>= 0;i--)
+        {
+            if(arr[i] === WIDTH/BLOCK_SIZE || arr[i] >= 5)
+            {
+                this.deleteRow(i, p.yT);
+            }
+        }
+
+    }
+
     collision()
     {
         if(this.piece.collision(this.drop))
         {
             this.drop.unshift(this.piece);
+            this.rowFilled();
             this.generateRandom();
         }
     }
