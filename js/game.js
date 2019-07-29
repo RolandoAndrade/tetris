@@ -8,6 +8,29 @@ const PIECES = [
 
 ];
 
+class Score
+{
+    constructor()
+    {
+        this.score = 0;
+    }
+
+    draw()
+    {
+        ctx.textAlign = "center";
+        ctx.font ='100px Arial, sans-serif';
+        ctx.fillStyle="#A3A3A3";
+        ctx.fillText(""+this.score,WIDTH/2,120);
+        ctx.font ='15px Arial, sans-serif';
+        ctx.fillText("Rolando Andrade",WIDTH/2,30);
+    }
+
+    add()
+    {
+        this.score+=150;
+    }
+}
+
 class Game
 {
     constructor()
@@ -34,6 +57,8 @@ class Game
                     a.piece.rotateRight(a.drop);
                     a.draw();
                     break;
+                default:
+                    a.loop();
             }
         });
     }
@@ -42,6 +67,7 @@ class Game
     init()
     {
         this.gameOver = false;
+        this.score = new Score();
         this.background = new Rectangle(0,0,WIDTH,HEIGHT, "#424242");
         this.fabric = new FabricOfPieces();
         this.generateRandom();
@@ -58,6 +84,7 @@ class Game
     draw()
     {
         this.background.draw();
+        this.score.draw();
         this.drop.forEach((e) => e.draw());
         this.piece.draw();
     }
@@ -90,6 +117,7 @@ class Game
             return false;
         });
         this.drop.forEach((e)=>e.moveBroke(yT+rowY*BLOCK_SIZE));
+        this.score.add();
         this.deleteEmpty();
     }
 

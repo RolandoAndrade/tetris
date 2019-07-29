@@ -171,8 +171,8 @@ class Piece
 
     break(y)
     {
+        let len = this.blocks.length;
         this.blocks = this.blocks.filter((a)=>a.y!==y);
-        return this.blocks.length;
     }
 
     moveBroke(y)
