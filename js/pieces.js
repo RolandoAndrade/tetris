@@ -18,6 +18,7 @@ class Piece
         this.yB = 0;
         this.xL = 0;
         this.yT = 0;
+        this.broke = false;
     }
 
     draw()
@@ -171,11 +172,28 @@ class Piece
     break(y)
     {
         this.blocks = this.blocks.filter((a)=>a.y!==y);
+        return this.blocks.length;
     }
 
-    moveBroke()
+    moveBroke(y)
     {
-
+        this.xL = 1000;
+        this.yT = 1000;
+        this.xR = 0;
+        this.yB = 0;
+        this.blocks.forEach((a)=>
+        {
+            if(a.y < y)
+            {
+                a.y += BLOCK_SIZE;
+            }
+            this.xL = Math.min(this.xL, a.x);
+            this.yT = Math.min(this.yT, a.y);
+            this.xR = Math.max(this.xR, a.x + BLOCK_SIZE);
+            this.yB = Math.max(this.yB, a.y + BLOCK_SIZE);
+        });
+        this.x = this.xL;
+        this.y = this.yT;
     }
 }
 

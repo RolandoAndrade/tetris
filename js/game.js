@@ -62,15 +62,35 @@ class Game
         this.piece.draw();
     }
 
+    deleteEmpty()
+    {
+        let i = 0;
+        while(i<this.drop.length)
+        {
+            if(this.drop[i].blocks.length===0)
+            {
+                this.drop.splice(i,1);
+            }
+            else
+            {
+                i++;
+            }
+        }
+    }
+
     deleteRow(rowY, yT)
     {
-        this.runDrop((y, e)=>
+        this.runDrop((y, e, i)=>
         {
             if(y === rowY)
             {
-                e.break(yT+y*BLOCK_SIZE);
+                e.break(yT+rowY*BLOCK_SIZE);
+                return true;
             }
-        })
+            return false;
+        });
+        this.drop.forEach((e)=>e.moveBroke(yT+rowY*BLOCK_SIZE));
+        this.deleteEmpty();
     }
 
     runDrop(fun)
@@ -79,36 +99,51 @@ class Game
         let yT = p.yT;
         let yB = p.yB;
         let length = (yB-yT)/BLOCK_SIZE;
-        this.drop.forEach((e) =>
+
+        let Break;
+        this.drop.forEach((e, i) =>
         {
             if (e.yT < yB && e.yB > yT)
             {
-                e.blocks.forEach((a) =>
+                try
                 {
-                    let y = (a.y - yT) / BLOCK_SIZE;
-                    if (y > -1 && y < length)
+                    e.blocks.forEach((a) =>
                     {
-                        fun(y, e);
-                    }
-                })
+                        let y = (a.y - yT) / BLOCK_SIZE;
+                        if (y > -1 && y < length)
+                        {
+                            if(fun(y, e, i))
+                            {
+                                throw Break;
+                            }
+
+                        }
+                    })
+                }
+                catch (e)
+                {
+
+                }
+
             }
         });
     }
 
     rowFilled()
     {
+
         let p = this.piece;
         let length = (p.yB-p.yT)/BLOCK_SIZE;
         let arr = new Array(length).fill(0);
-        this.runDrop((y)=>arr[y]++);
-        for(let i = length-1; i>= 0;i--)
+        this.runDrop((y)=>{arr[y]++; return false});
+        console.log(arr);
+        for(let i = length -1 ; i >= 0; i--)
         {
-            if(arr[i] === WIDTH/BLOCK_SIZE || arr[i] >= 5)
+            if(arr[i] === WIDTH/BLOCK_SIZE)
             {
                 this.deleteRow(i, p.yT);
             }
         }
-
     }
 
     collision()
@@ -123,8 +158,8 @@ class Game
 
     loop()
     {
-        this.piece.moveY(this.drop);
         this.collision();
+        this.piece.moveY(this.drop);
         this.draw();
 
     }
@@ -136,4 +171,4 @@ function loop()
 {
     game.loop();
 }
-window.setInterval(loop,100);
+window.setInterval(loop,200);
