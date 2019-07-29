@@ -43,7 +43,6 @@ class Game
         let a = this;
         document.addEventListener("keydown",function (e)
         {
-            console.log(e.keyCode);
             switch (e.keyCode)
             {
                 case 38:
